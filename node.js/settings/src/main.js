@@ -1,22 +1,26 @@
 // @ts-check
 // Formatting, Linting, Type Checking
-// Formatting : prettier
-// Linting : ESLint
-// Type checking : TypeScript
+// Formatting: Prettier
+// Linting: ESLint
+// Type checking: TypeScript
 
-console.log('Hello, world!')
+// 작동 여부 확인
+// eslint-disable-next-line no-console
+// console.log("Hello, world!")
 
-const x = 1
-console.log(x)
+// var x = 1
 
-const string = 'Hello'
-const result = Math.log(string)
-console.log(result)
+// exports = 3
 
-const http = require('http')
+// const someString = "Hello"
+// const result = Math.log(someString)
+// console.log(result)
+
+const http = require("http")
 
 const server = http.createServer((req, res) => {
-  res.statusCode = res.end('Hello!')
+  res.statusCode = 200
+  res.end("Hello!")
 })
 
 const PORT = 4000
