@@ -1,44 +1,66 @@
-const http = require('http');
-
 const express = require('express');
 
 const app = express();
 
-const users = ['Tom', 'Andy', 'Jessica', 'Paul'];
+let members = require('./members');
 
-// http
-let server = http.createServer((request, response) => {
-  if (request.url === '/') {
-    response.end('<h1>Hello world!</h1>');
-  } else if (request.url === '/users') {
-    response.end(`<h1>${users}</h1>`);
-  } else if (request.url.split('/')[1] === 'users') {
-    const userIdx = request.url.split('/')[2];
-    const userName = users[userIdx - 1];
+// 미들웨어
+app.use(express.json());
 
-    response.end(`<h1>${userName}</h1>`);
+// GET
+app.get('/api/members', (req, res) => {
+  const { team } = req.query;
+  if (team) {
+    const teamMembers = members.filter(m => m.team === team);
+    res.send(teamMembers);
   } else {
-    response.end('<h1>Page Not Available</h1>');
+    res.send(members);
   }
 });
-server.listen(3000);
 
-// express
-app.get('/', (request, response) => {
-  response.end('<h1>Hello world!</h1>');
+app.get('/api/members/:id', (req, res) => {
+  const { id } = req.params;
+  const teamMembers = members.find(m => m.id === Number(id));
+
+  if (teamMembers) {
+    res.send(teamMembers);
+  } else {
+    res.status(404).send({ message: 'There is no member with the id' });
+  }
 });
 
-app.get('/users', (request, response) => {
-  response.end(`<h1>${users}</h1>`);
+// POST
+app.post('/api/members', (req, res) => {
+  const newMember = req.body;
+  members.push(newMember);
+  res.send(newMember);
 });
 
-app.get('/users/:id', (request, response) => {
-  const userName = users[request.params.id - 1];
-  response.end(`<h1>${userName}</h1>`);
-});
+// PUT
+app.put('/api/members/:id', (req, res) => {
+  const { id } = req.params;
+  const newInfo = req.body;
+  const member = members.find(m => m.id === Number(id));
+  if (member) {
+    Object.keys(newInfo).forEach(prop => member[prop] = newInfo[prop]);
+    res.send(member);
+  } else {
+    res.status(404).send({ message: 'There is no member with the id' });
+  }
+})
 
-app.get('*', (request, response) => {
-  response.end('<h1>Page Not Available</h1>');
-});
+// DELETE
+app.delete('/api/members/:id', (req, res) => {
+  const { id } = req.params;
+  const memberCount = members.length;
+  members = members.filter(m => m.id !== Number(id));
+  if (members.length < memberCount) {
+    res.send({ message: 'Deleted' });
+  } else {
+    res.status(404).send({ message: 'There is no member with the id' });
+  }
+})
 
-app.listen(3000);
+app.listen(3000, () => {
+  console.log('Server is listening...');
+});
