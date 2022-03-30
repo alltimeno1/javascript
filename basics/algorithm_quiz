@@ -16,3 +16,24 @@ function solution(progresses, speeds) {
     
     return answer;
 }
+
+// https://programmers.co.kr/learn/courses/30/lessons/42587?language=javascript
+
+function solution(priorities, location) {
+    let list = priorities.map((priority, location) => ({ priority, location }))
+    let result = [];
+    
+    while (list.length) {
+        const firstItem = list.shift();
+        
+        if (list.find(item => item.priority > firstItem.priority)) {
+            list.push(firstItem)
+        } else {
+            result.push(firstItem);
+        }
+    }
+    
+    const answer = result.findIndex((item) => item.location === location) + 1;
+    
+    return answer;
+}
