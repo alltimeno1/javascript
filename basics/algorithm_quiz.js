@@ -17,6 +17,20 @@ function solution(progresses, speeds) {
     return answer;
 }
 
+// https://programmers.co.kr/learn/courses/30/lessons/42578
+
+function solution(clothes) {
+    let obj = {}
+    
+    clothes.forEach(cloth => obj[cloth[1]] = (obj[cloth[1]] || 0) + 1);
+    
+    const list = Object.values(obj)
+    
+    const answer = list.reduce((a, b) => a * (b + 1) , 1) - 1;
+    
+    return answer;
+}
+
 // https://programmers.co.kr/learn/courses/30/lessons/42587?language=javascript
 
 function solution(priorities, location) {
@@ -68,6 +82,7 @@ function solution(brown, yellow) {
     for (let y = 3; y <= Math.sqrt(total); y++) {
         const x = total / y
         if (!(total % x) && (x - 2) * (y - 2) == yellow) {
+            
             return [x, y];
         }
     }
